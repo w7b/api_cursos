@@ -7,7 +7,6 @@ import com.gabriel.cursos.repository.CourseRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.Optional;
 
 @Service

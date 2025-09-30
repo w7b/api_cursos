@@ -1,9 +1,10 @@
 package com.gabriel.cursos.services;
 
-import com.gabriel.cursos.entity.CourseEntity;
+import com.gabriel.cursos.dto.CourseResponseDTO;
+import com.gabriel.cursos.entity.ProfessorEntity;
 import com.gabriel.cursos.repository.CourseRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.gabriel.cursos.repository.ProfessorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,11 +13,17 @@ import java.util.Optional;
 public class SearchCourseService {
 
     private final CourseRepository courseRepository;
-    public SearchCourseService(CourseRepository courseRepository) {
+    private final ProfessorRepository professorRepository;
+
+    @Autowired
+    public SearchCourseService(CourseRepository courseRepository, ProfessorRepository professorRepository) {
         this.courseRepository = courseRepository;
+        this.professorRepository = professorRepository;
     }
 
-    public Page<CourseEntity> execute(String filterName, String filterCategory) {
-        return this.courseRepository.findByNameOrCategoryContainingIgnoreCase(filterName, String.valueOf(Optional.of(filterCategory)), Pageable.ofSize(10));
+    public Optional<ProfessorEntity> execute(Long professorId) {
+        return professorRepository.findById(professorId);
     }
+
+    //TODO: RECUPERAR O PROFESSOR E OS CURSOS, DENTRO DO ARRAY;
 }
