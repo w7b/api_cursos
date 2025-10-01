@@ -21,7 +21,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                     auth
-                            .requestMatchers("/courses/professor/create").permitAll()
+                            .requestMatchers("/courses/teacher/register").permitAll()
                             .requestMatchers("/courses/auth").permitAll()
 
                     ;

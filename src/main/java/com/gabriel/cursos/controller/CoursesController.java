@@ -4,7 +4,7 @@ import com.gabriel.cursos.dto.CourseResponseDTO;
 import com.gabriel.cursos.dto.ProfessorResponseDTO;
 import com.gabriel.cursos.dto.UpdateDTO;
 import com.gabriel.cursos.entity.CourseEntity;
-import com.gabriel.cursos.mapper.Converter;
+import com.gabriel.cursos.mapper.CourseMapper;
 import com.gabriel.cursos.mapper.ProfessorMapper;
 import com.gabriel.cursos.services.CreateCourseService;
 import com.gabriel.cursos.services.DeleteCourseService;
@@ -25,15 +25,15 @@ public class CoursesController {
     private final SearchCourseService searchCourseService;
     private final UpdateCourseService updateCourseService;
     private final DeleteCourseService deleteCourseService;
-    private final Converter converter;
+    private final CourseMapper courseMapper;
 
     @Autowired
-    public CoursesController(CreateCourseService createCourseService, SearchCourseService searchCourseService, UpdateCourseService updateCourseService, DeleteCourseService deleteCourseService, Converter converter) {
+    public CoursesController(CreateCourseService createCourseService, SearchCourseService searchCourseService, UpdateCourseService updateCourseService, DeleteCourseService deleteCourseService, CourseMapper courseMapper) {
         this.createCourseService = createCourseService;
         this.searchCourseService = searchCourseService;
         this.updateCourseService = updateCourseService;
         this.deleteCourseService = deleteCourseService;
-        this.converter = converter;
+        this.courseMapper = courseMapper;
     }
 
     @PostMapping
@@ -42,7 +42,7 @@ public class CoursesController {
         Long professorId = Long.parseLong(String.valueOf(request.getAttribute("professor_id")));
         System.out.println(professorId);
         var createdCourse = this.createCourseService.execute(course, professorId);
-        var courseDTO = converter.convertToDto(createdCourse);
+        var courseDTO = courseMapper.convertToDto(createdCourse);
 
         return ResponseEntity.ok().body(courseDTO);
     }
@@ -70,7 +70,7 @@ public class CoursesController {
 
     @PutMapping("/{idCourse}")
     @PreAuthorize("hasRole('PROFESSOR')")
-    public ResponseEntity<Object> updateCourse(@RequestBody UpdateDTO updateDTO, @PathVariable Long idCourse) {
+    public ResponseEntity<CourseResponseDTO> updateCourse(@RequestBody UpdateDTO updateDTO, @PathVariable Long idCourse) {
         var result = this.updateCourseService.updateById(updateDTO, idCourse);
         return ResponseEntity.ok().body(result);
     }
@@ -82,7 +82,7 @@ public class CoursesController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PatchMapping("/{idCourse}/activate")
+    @PatchMapping("/status/{idCourse}")
     @PreAuthorize("hasRole('PROFESSOR')")
     public ResponseEntity<Object> activateCourse(@PathVariable Long idCourse) {
         var updateCourse = this.updateCourseService.isActivate(idCourse);

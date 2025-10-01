@@ -1,6 +1,5 @@
 package com.gabriel.cursos.mapper;
 
-import com.gabriel.cursos.dto.CourseResponseDTO;
 import com.gabriel.cursos.dto.CourseResponseGetDTO;
 import com.gabriel.cursos.dto.ProfessorResponseDTO;
 import com.gabriel.cursos.entity.ProfessorEntity;

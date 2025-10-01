@@ -22,7 +22,6 @@ public class CreateCourseService {
         // 2. Vincula a entidade do professor ao curso.
         course.setProfessor(professor);
 
-        // 3. Salva a entidade do curso no banco de dados.
         return this.courseRepository.save(course);
     }
 }

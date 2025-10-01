@@ -24,7 +24,7 @@ public class AuthenticationController {
     private TeacherRegisterService teacherRegisterService;
 
     //Create
-    @PostMapping("/professor/create")
+    @PostMapping("/teacher/register")
     public ResponseEntity<Object> create (@RequestBody ProfessorEntity professor) {
         try {
             var result = this.teacherRegisterService.execute(professor);

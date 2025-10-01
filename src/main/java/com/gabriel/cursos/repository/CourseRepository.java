@@ -1,5 +1,6 @@
 package com.gabriel.cursos.repository;
 
+import com.gabriel.cursos.dto.CourseResponseDTO;
 import com.gabriel.cursos.entity.CourseEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
 
-    Optional<CourseEntity> findById(Long id);
+    //Optional<CourseEntity> findById(Long id);
 
     List<CourseEntity> findByNameContainingIgnoreCase(String name);
 }

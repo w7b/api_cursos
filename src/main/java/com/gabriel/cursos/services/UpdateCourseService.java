@@ -1,10 +1,12 @@
 package com.gabriel.cursos.services;
 
+import com.gabriel.cursos.dto.CourseResponseDTO;
 import com.gabriel.cursos.dto.UpdateDTO;
 import com.gabriel.cursos.entity.Activate;
-import com.gabriel.cursos.entity.CourseEntity;
+import com.gabriel.cursos.mapper.CourseMapper;
 import com.gabriel.cursos.repository.CourseRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,25 +15,31 @@ import java.util.Optional;
 public class UpdateCourseService {
 
     private final CourseRepository courseRepository;
+    private final CourseMapper courseMapper;
 
-    public UpdateCourseService(CourseRepository courseRepository) {
+    @Autowired
+    public UpdateCourseService(CourseRepository courseRepository, CourseMapper courseMapper) {
         this.courseRepository = courseRepository;
+        this.courseMapper = courseMapper;
     }
 
-    public CourseEntity updateById (UpdateDTO updateDTO, Long idCourse) {
-        var course = this.courseRepository.findById(idCourse).orElseThrow(() -> new RuntimeException("Course not found"));
+    public CourseResponseDTO updateById (UpdateDTO updateDTO, Long idCourse) {
+        var courseEntity = this.courseRepository.findById(idCourse).orElseThrow(() -> new RuntimeException("Course not found"));
 
-        Optional.ofNullable(updateDTO.category()).ifPresent(course::setCategory);
-        Optional.ofNullable(updateDTO.name()).ifPresent(course::setName);
+        Optional.ofNullable(updateDTO.category()).ifPresent(courseEntity::setCategory);
+        Optional.ofNullable(updateDTO.name()).ifPresent(courseEntity::setName);
 
-        return this.courseRepository.saveAndFlush(course);
+        var updateCourseEntity = this.courseRepository.saveAndFlush(courseEntity);
+        return this.courseMapper.convertToDto(updateCourseEntity);
     }
 
     @Transactional
-    public CourseEntity isActivate (Long idCourse) {
-        var course = this.courseRepository.findById(idCourse).orElseThrow(() -> new RuntimeException("Course not found"));
+    public CourseResponseDTO isActivate (Long idCourse) {
+        var courseEntity = this.courseRepository.findById(idCourse).orElseThrow(() -> new RuntimeException("Course not found"));
 
-        course.setActivate(course.getActivate() == Activate.ENABLED ? Activate.DISABLE : Activate.ENABLED);
-        return course;
+        courseEntity.setActivate(courseEntity.getActivate() == Activate.ENABLED ? Activate.DISABLE : Activate.ENABLED);
+
+        var updateCourseEntity = this.courseRepository.saveAndFlush(courseEntity);
+        return this.courseMapper.convertToDto(updateCourseEntity);
     }
 }

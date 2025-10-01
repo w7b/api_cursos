@@ -5,7 +5,7 @@ import com.gabriel.cursos.entity.CourseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class Converter {
+public class CourseMapper {
 
     public CourseResponseDTO convertToDto(CourseEntity courseEntity) {
         String professorName = (courseEntity.getProfessor() != null) ? courseEntity.getProfessor().getName() : "Não atribuído";
